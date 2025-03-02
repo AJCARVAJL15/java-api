@@ -4,9 +4,10 @@ on:
   push:
     tags:
       - '*'  
+
 jobs:
   release:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # Usa el runner de GitHub con Ubuntu
 
     steps:
     - name: Checkout code
@@ -17,12 +18,24 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: '17'
+        cache: maven  # Habilita cacheo para acelerar builds
 
     - name: Build with Maven
       run: mvn clean package -DskipTests
 
     - name: Verify JAR File Exists
-      run: ls -l target/  
+      run: ls -l target/
+
+    - name: Find JAR File
+      id: find_jar
+      run: |
+        JAR_FILE=$(ls target/*.jar | head -n 1)
+        if [ -z "$JAR_FILE" ]; then
+          echo "ERROR: No se encontró ningún .jar en target/"
+          exit 1
+        fi
+        echo "JAR_FILE=$JAR_FILE" >> $GITHUB_ENV
+        echo "Archivo JAR encontrado: $JAR_FILE"
 
     - name: Create Release
       id: create_release
@@ -35,21 +48,12 @@ jobs:
         draft: false
         prerelease: false
 
-    - name: Debug Target Folder
-      run: |
-        echo "Contenido de target/:"
-        ls -l target/
-
-    - name: Find JAR File
-      id: find_jar
-      run: echo "JAR_FILE=$(ls target/*.jar | head -n 1)" >> $GITHUB_ENV
-
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: target/*.jar 
+        asset_path: ${{ env.JAR_FILE }}
         asset_name: java-api.jar
         asset_content_type: application/java-archive
