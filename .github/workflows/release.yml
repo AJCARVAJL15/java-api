@@ -35,6 +35,11 @@ jobs:
         draft: false
         prerelease: false
 
+    - name: Debug Target Folder
+      run: |
+        echo "Contenido de target/:"
+        ls -l target/
+
     - name: Find JAR File
       id: find_jar
       run: echo "JAR_FILE=$(ls target/*.jar | head -n 1)" >> $GITHUB_ENV
