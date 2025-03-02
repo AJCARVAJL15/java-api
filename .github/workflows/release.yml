@@ -35,6 +35,10 @@ jobs:
         draft: false
         prerelease: false
 
+    - name: Find JAR File
+      id: find_jar
+      run: echo "JAR_FILE=$(ls target/*.jar | head -n 1)" >> $GITHUB_ENV
+
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
       env:
