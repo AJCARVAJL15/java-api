@@ -42,10 +42,13 @@ jobs:
  
     - name: Push Docker image
       run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/java-api:latest
- 
-    - name: Create Git Tag
+
+    - name: Autenticación con PAT
+      run: git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/AJCARVAJL15/java-api.git
+
+    - name: Crear Git Tag
       id: tag
-      run: echo "::set-output name=tag::$(echo ${GITHUB_REF##*/}-$(date +%Y%m%d%H%M%S))"
- 
+      run: echo "tag=$(echo ${GITHUB_REF##*/}-$(date +%Y%m%d%H%M%S))" >> $GITHUB_ENV
+
     - name: Push Git Tag
-      run: git tag ${{ steps.tag.outputs.tag }} && git push origin ${{ steps.tag.outputs.tag }}
+      run: git tag ${{ env.tag }} && git push origin ${{ env.tag }}
