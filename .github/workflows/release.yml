@@ -64,7 +64,7 @@ name: Deploy on Tag
 on:
   push:
     tags:
-      - 'v*'  # Este pipeline se ejecuta cuando se empuja un tag que empieza con 'v'
+      - '*'  # Este pipeline se ejecuta cuando se empuja un tag que empieza con 'v'
 
 jobs:
   deploy:
