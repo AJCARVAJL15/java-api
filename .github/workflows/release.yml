@@ -2,9 +2,9 @@ name: Release Pipeline
 
 on:
   push:
-    refs:
-      - refs/tags/*
-      
+    tags:
+      - '*'  
+
 jobs:
   release:
     runs-on: ubuntu-latest  # Usa el runner de GitHub con Ubuntu
