@@ -18,6 +18,6 @@ public class MyApiControllerTest {
     void shouldReturnPong() throws Exception {
         mockMvc.perform(get("/api/ping"))
                 .andExpect(status().isOk()) // Verifica que el estado HTTP es 200
-                .andExpect(content().string("pong")); // Verifica que la respuesta es "pong"
+                .andExpect(content().string("pong")); // Verifica que la respuesta  "pong"
     }
 }
