@@ -3,7 +3,7 @@ name: Release Pipeline
 on:
   push:
     tags:
-      - 'vmain-*'  
+      - '*'  
 
 jobs:
   release:
